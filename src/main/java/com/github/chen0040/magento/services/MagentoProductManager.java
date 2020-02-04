@@ -145,7 +145,7 @@ public class MagentoProductManager extends MagentoHttpComponent {
       return getProductBySku(sku) != null;
    }
 
-   public Product saveProduct(Product product){
+   public Product oldSaveProduct(Product product){
       String sku = product.getSku();
       String url = baseUri() + "/" + relativePath4Products + "/" + escape(sku);
 
@@ -212,34 +212,97 @@ public class MagentoProductManager extends MagentoHttpComponent {
       return JSON.parseObject(json, Product.class);
    }
 
+   public Product saveProduct(Product product) {
+      String sku = product.getSku();
+      String url = baseUri() + "/" + "rest/V1/products" + "/" + escape(sku);
+      Map<String, Object> detail = new HashMap<>();
+      detail.put("sku", product.getSku());
+      detail.put("name", product.getName());
+      detail.put("price", Double.valueOf(product.getPrice()));
+      detail.put("status", Integer.valueOf(product.getStatus()));
+      detail.put("type_id", product.getType_id());
+      detail.put("attribute_set_id", Long.valueOf(product.getAttribute_set_id()));
+      detail.put("weight", Double.valueOf(product.getWeight()));
+      detail.put("visibility", Integer.valueOf(product.getVisibility()));
+      Map<String, Object> stockItem = new HashMap<>();
+      if (product.getExtension_attributes() != null && product.getExtension_attributes().getStock_item() != null) {
+         stockItem.put("qty", Integer.valueOf(product.getExtension_attributes().getStock_item().getQty()));
+         stockItem.put("is_in_stock", Boolean.valueOf(product.getExtension_attributes().getStock_item().isIs_in_stock()));
+         Map<String, Object> extensionAttributes = new HashMap<>();
+         extensionAttributes.put("stock_item", stockItem);
+         detail.put("extension_attributes", extensionAttributes);
+      }
+      List<Map<String, Object>> customAttributes = new ArrayList<>();
+      for (MagentoAttribute ma : product.getCustom_attributes()) {
+         if (ma.getAttribute_code().equals("description")) {
+            Map<String, Object> description = new HashMap<>();
+            description.put("attribute_code", "description");
+            byte[] ptext = ma.getValue().toString().getBytes(StandardCharsets.ISO_8859_1);
+            String value = new String(ptext, StandardCharsets.UTF_8);
+            description.put("value", value);
+            customAttributes.add(description);
+            continue;
+         }
+         if (ma.getAttribute_code().equals("short_description")) {
+            Map<String, Object> shortDescription = new HashMap<>();
+            shortDescription.put("attribute_code", "short_description");
+            byte[] ptext = ma.getValue().toString().getBytes(StandardCharsets.ISO_8859_1);
+            String value = new String(ptext, StandardCharsets.UTF_8);
+            shortDescription.put("value", value);
+            customAttributes.add(shortDescription);
+            continue;
+         }
+         if (ma.getAttribute_code().equals("special_price")) {
+            Map<String, Object> categoryIds = new HashMap<>();
+            categoryIds.put("attribute_code", "special_price");
+            categoryIds.put("value", ma.getValue());
+            customAttributes.add(categoryIds);
+            continue;
+         }
+         if (ma.getAttribute_code().equals("special_from_date")) {
+            Map<String, Object> categoryIds = new HashMap<>();
+            categoryIds.put("attribute_code", "special_from_date");
+            categoryIds.put("value", ma.getValue());
+            customAttributes.add(categoryIds);
+            continue;
+         }
+         if (ma.getAttribute_code().equals("special_to_date")) {
+            Map<String, Object> categoryIds = new HashMap<>();
+            categoryIds.put("attribute_code", "special_to_date");
+            categoryIds.put("value", ma.getValue());
+            customAttributes.add(categoryIds);
+         }
+      }
+      detail.put("custom_attributes", customAttributes);
+      Map<String, Object> req = new HashMap<>();
+      req.put("product", detail);
+      String body = JSON.toJSONString(req, new SerializerFeature[] { SerializerFeature.PrettyFormat });
+      logger.info("posting:\r\n{}", body);
+      String json = putSecure(url, body);
+      if (!validate(json))
+         return null;
+      return (Product)JSON.parseObject(json, Product.class);
+   }
+
    public String page(String name, String value, String condition_type) {
-      String uri = baseUri() + "/" + relativePath4Products
-              + "?searchCriteria[filter_groups][0][filters][0][field]=category_gear"
-              + "&searchCriteria[filter_groups][0][filters][0][value]=86"
-              + "&searchCriteria[filter_groups][0][filters][0][condition_type]=finset";
+      String uri = baseUri() + "/" + "rest/V1/products" + "?searchCriteria[filter_groups][0][filters][0][field]=category_gear&searchCriteria[filter_groups][0][filters][0][value]=86&searchCriteria[filter_groups][0][filters][0][condition_type]=finset";
       return getSecured(uri);
    }
 
    public List<MagentoType> listProductTypes() {
-      String uri = baseUri() + "/rest/V1/products/types"
-              + "?searchCriteria[currentPage]=0"
-              + "&searchCriteria[pageSize]=1000";
+      String uri = baseUri() + "/rest/V1/products/types?searchCriteria[currentPage]=0&searchCriteria[pageSize]=1000";
       String json = getSecured(uri);
       return JSON.parseArray(json, MagentoType.class);
    }
 
    public List<MagentoType> listProductTypes(int page, int pageSize) {
-      String uri = baseUri() + "/rest/V1/products/types"
-              + "?searchCriteria[currentPage]=" + page
-              + "&searchCriteria[pageSize]=" + pageSize;
+      String uri = baseUri() + "/rest/V1/products/types?searchCriteria[currentPage]=" + page + "&searchCriteria[pageSize]=" + pageSize;
       String json = getSecured(uri);
       return JSON.parseArray(json, MagentoType.class);
    }
 
    public String deleteProduct(String sku) {
-      String url = baseUri() + "/" + relativePath4Products + "/" + escape(sku);
+      String url = baseUri() + "/" + "rest/V1/products" + "/" + escape(sku);
       return deleteSecure(url);
    }
-
-
 }

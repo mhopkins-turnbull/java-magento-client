@@ -4,44 +4,44 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.stasbranger</groupId>
+    <groupId>com.github.mhopkins-turnbull</groupId>
     <artifactId>java-magento-client</artifactId>
-    <version>1.1.2</version>
+    <version>1.2.1</version>
 
 
 
     <licenses>
         <license>
             <name>MIT</name>
-            <url>https://github.com/stasbranger/java-magento-client/blob/master/LICENSE</url>
+            <url>https://github.com/mhopkins-turnbull/java-magento-client/blob/master/LICENSE</url>
             <comments>MIT License</comments>
         </license>
     </licenses>
 
     <developers>
         <developer>
-            <email>info@stasbranger.com</email>
-            <id>stasbranger</id>
-            <name>Flavio Troia</name>
-            <url>https://github.com/stasbranger</url>
+            <email>martin.hopkins@turnbullsonline.co.uk</email>
+            <id>mhopkins-turnbull</id>
+            <name>Martin Hopkins</name>
+            <url>https://github.com/mhopkins-turnbull</url>
         </developer>
     </developers>
 
     <scm>
-        <url>https://github.com/stasbranger/java-magento-client</url>
-        <connection>scm:git:git://github.com/stasbranger/java-magento-client.git</connection>
-        <developerConnection>scm:git:git@github.com:stasbranger/java-magento-client.git</developerConnection>
+        <url>https://github.com/mhopkins-turnbull/java-magento-client</url>
+        <connection>scm:git:git://github.com/mhopkins-turnbull/java-magento-client.git</connection>
+        <developerConnection>scm:git:git@github.com:mhopkins-turnbull/java-magento-client.git</developerConnection>
     </scm>
 
     <issueManagement>
-        <url>https://github.com/stasbranger/java-magento-client/issues</url>
+        <url>https://github.com/mhopkins-turnbull/java-magento-client/issues</url>
         <system>GitHub Issues</system>
     </issueManagement>
 
 
     <name>Java Client to Magento Site</name>
     <description>Java client that communicate with magento site in Java</description>
-    <url>https://github.com/stasbranger/java-magento-client</url>
+    <url>https://github.com/mhopkins-turnbull/java-magento-client</url>
 
     <distributionManagement>
         <snapshotRepository>
@@ -58,7 +58,7 @@
         <repository>
             <id>central</id>
             <name>Central Repository</name>
-            <url>http://repo.maven.apache.org/maven2</url>
+            <url>https://repo.maven.apache.org/maven2</url>
             <layout>default</layout>
             <snapshots>
                 <enabled>false</enabled>
@@ -70,7 +70,7 @@
         <pluginRepository>
             <id>central</id>
             <name>Central Repository</name>
-            <url>http://repo.maven.apache.org/maven2</url>
+            <url>https://repo.maven.apache.org/maven2</url>
             <layout>default</layout>
             <snapshots>
                 <enabled>false</enabled>
@@ -404,13 +404,13 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.20</version>
+            <version>1.7.30</version>
         </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
-            <version>1.7.20</version>
+            <version>1.7.30</version>
         </dependency>
 
 
