@@ -14,7 +14,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.*;
 
-
+import java.nio.charset.StandardCharsets;
 /**
  * Created by xschen on 12/6/2017.
  */
